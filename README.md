@@ -1,4 +1,4 @@
-# Example themer AdminLTE 3 Laravel 8 PHP 7.4 Posgrest
+# Example themer AdminLTE 3 Laravel 8 PHP 7.4 Posgrest Token JWT
 * Login
 * create view login and customiser themer.
 * profile customise
