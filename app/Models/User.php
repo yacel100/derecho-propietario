@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable implements JWTSubject {
     use HasApiTokens, HasFactory, Notifiable;
@@ -44,7 +45,9 @@ class User extends Authenticatable implements JWTSubject {
 
     //return profile user image
     public function adminlte_image(){
-        return 'https://picsum.photos/300/300';
+        
+        return url()->full().'/img/profile_image/men.png';
+        //return 'https://picsum.photos/300/300';
     }
 
     //return role user

@@ -21,7 +21,9 @@ class UserSeeder extends Seeder
             'email' => 'gclaure@cochabamba.bo',
             'email_verified_at' => now(),
             'password' => Hash::make('admin123'),
-            'role' => 'ADMIN',
+            'id_role' => 1,
+            'genero' => 'MASCULINO', //FEMENINO
+            'ofice' => 'Departamento de Desarrollo de Sistemas DDSI',
             'created_at' => now(),
             'updated_at' => now()
         ]);
