@@ -1,8 +1,6 @@
-# Example themer AdminLTE 3 Laravel 8 PHP 7.4 Posgrest Token JWT
-* Login
-* create view login and customiser themer.
-* profile customise
+# Sistema Para la Certificacion Derecho Propietario
 ## Installing command and run
 * composer install
+* create database
 * php artisan migrate:fresh --seed
 * php artisan serve --port 8000 --host {ip}
