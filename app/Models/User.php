@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Rol;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Http\Request;
 
 class User extends Authenticatable implements JWTSubject {
     use HasApiTokens, HasFactory, Notifiable;
@@ -45,19 +46,31 @@ class User extends Authenticatable implements JWTSubject {
 
     //return profile user image
     public function adminlte_image(){
+       
+       
+        if(Auth::user()->profile_img != null || Auth::user()->profile_img != ''){
+            return url('/').Auth::user()->profile_img;
+        }else{
+            if(Auth::user()->genero == 'MASCULINO'){
+                return url('/').'/img/profile_image/men.png';
+            }else{
+                return url('/').'/img/profile_image/women_one.png';
+                
+            }
+        }
         
-        return url()->full().'/img/profile_image/men.png';
         //return 'https://picsum.photos/300/300';
     }
 
     //return role user
     public function adminlte_desc(){
-        return 'Administrador';
+       return Rol::select('name')->where(['id' => Auth::user()->id_role])->first()->name;
     }
     //return profile user view
     public function adminlte_profile_url(){
-        return 'profile/username';
+        return '/user/profile';
     }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

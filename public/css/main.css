@@ -1,0 +1,10 @@
+.login-page{
+    background-image: url("/img/admin/index.png") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding-top: 4%;
+    justify-content: flex-start !important;
+}
+
+

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3', //change title the aplications
+    'title' => 'DCHO PROPIETARIO', //change title the aplications
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -44,9 +44,9 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
-
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    
+    'logo' => '',
+    'logo_img' => '/img/admin/cbba.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -66,7 +66,7 @@ return [
 
     'usermenu_enabled' => true,
     'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-primary',
+    'usermenu_header_class' => 'bg-secondary bg-gradient',
     'usermenu_image' => true, //show image user
     'usermenu_desc' => true, //show text role user
     'usermenu_profile_url' => true, //show user profile view
@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -226,15 +226,34 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
+        // [
+        //     'type'         => 'navbar-search',
+        //     'text'         => 'search',
+        //     'topnav_right' => true,
+        // ],
+
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'type'         => 'navbar-notification',
+            'id'           => 'my-notification',      // An ID attribute (required).
+            'icon'         => 'fas fa-bell',          // A font awesome icon (required).
+            'icon_color'   => 'warning',              // The initial icon color (optional).
+            'label'        => 0,                      // The initial label for the badge (optional).
+            'label_color'  => 'danger',               // The initial badge color (optional).
+            'url'          => 'notifications/show',   // The url to access all notifications/elements (required).
+            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            'dropdown_mode'   => true,                // Enables the dropdown mode (optional).
+            'dropdown_flabel' => 'Ver Notificaciones', // The label for the dropdown footer link (optional).
+            // 'update_cfg'   => [
+            //     'url' => 'notifications/get',         // The url to periodically fetch new data (optional).
+            //     'period' => 30,                       // The update period for get new data (in seconds, optional).
+            // ],
+           
+        ],
+
 
         // Sidebar items:
         [
