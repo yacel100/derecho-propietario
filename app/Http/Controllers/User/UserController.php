@@ -15,7 +15,12 @@ class UserController extends Controller {
                 ->where(['id' => Auth::user()->id])
                 ->first();
 
-        return view('user.profile');
+       
+
+        return view('user.profile', [
+            'url_profile' => User::adminlte_image(),
+            'user_data' => $user
+        ]);
     }
 
 }

@@ -2,12 +2,15 @@
 @section('title', 'Home')
 
 @section('content_header') 
-    <h1>Dashboard</h1>
-  
+    <h1>SOLICITUDES CERTIFICACION DERECHO PROPIETARIO GAMC</h1>
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    
+
+
+
+
 @stop
 
 @section('css')

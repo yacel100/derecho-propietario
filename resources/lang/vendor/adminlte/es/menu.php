@@ -5,7 +5,7 @@ return [
     'main_navigation'               => 'MENU PRINCIPAL',
     'blog'                          => 'Blog',
     'pages'                         => 'Páginas',
-    'account_settings'              => 'AJUSTES DE LA CUENTA',
+    'account_settings'              => 'OPCIONES',
     'profile'                       => 'Perfil',
     'change_password'               => 'Cambiar Contraseña',
     'multilevel'                    => 'Multi Nivel',

@@ -47,7 +47,7 @@ return [
     
     'logo' => '',
     'logo_img' => '/img/admin/cbba.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'AdminLTE',
@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '',
+    'dashboard_url' => '/home',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -254,11 +254,10 @@ return [
            
         ],
 
-
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Buscar',
         ],
         [
             'text' => 'blog',
@@ -266,11 +265,11 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
+            'text'        => 'MI PERFIL',
+            'url'         => 'user/profile',
+            'icon'        => 'fas fa-fw fa-user',
+            //'label'       => 4,
+            //'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
         [
