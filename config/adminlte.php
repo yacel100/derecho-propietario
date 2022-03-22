@@ -271,11 +271,12 @@ return [
             //'label'       => 4,
             //'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
+
+        ['header' => 'opciones'],
         [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'SOLICITUDES',
+            'url'  => 'request/all-request',
+            'icon' => 'far fa-address-card', 
         ],
         [
             'text' => 'change_password',
@@ -393,6 +394,16 @@ return [
                 ],
             ],
         ],
+        'Animation' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css',
+                ],
+            ],
+        ],
         'Select2' => [
             'active' => false,
             'files' => [
@@ -425,6 +436,53 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                ],
+            ],
+        ],
+        'leaflet' => [
+            'active' => false,
+            'files' => [
+
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//unpkg.com/leaflet@1.2.0/dist/leaflet.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css',
+                ],
+                //aqui
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//unpkg.com/leaflet@1.7.1/dist/leaflet.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//unpkg.com/leaflet@1.7.1/dist/leaflet.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/leaflet.wms@0.2.0/dist/leaflet.wms.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.4/proj4.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js',
                 ],
             ],
         ],

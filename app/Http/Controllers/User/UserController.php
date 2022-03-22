@@ -14,12 +14,13 @@ class UserController extends Controller {
         $user = User::select()
                 ->where(['id' => Auth::user()->id])
                 ->first();
-
+        $genero = ['MASCULINO', 'FEMENINO'];
        
 
         return view('user.profile', [
             'url_profile' => User::adminlte_image(),
-            'user_data' => $user
+            'user_data' => $user,
+            'genero' => $genero
         ]);
     }
 
