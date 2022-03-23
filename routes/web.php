@@ -34,6 +34,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'request', 'middleware' => 'auth'], function () {
     Route::get('/all-request', 'App\Http\Controllers\Request\RequestController@getAllRequest')->name('all-request');
+    Route::get('/new-request', 'App\Http\Controllers\Request\RequestController@newRegisterRequest')->name('new-request');
+    Route::post('/new-register', 'App\Http\Controllers\Request\RequestController@saveRequest')->name('request.register');
 });
 
 

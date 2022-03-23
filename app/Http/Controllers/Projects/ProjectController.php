@@ -1,27 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Request;
+namespace App\Http\Controllers\Projects;
 
-use App\Models\Request as Requests;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-
-class RequestController extends Controller {
-
-
-    public function getAllRequest(){
-
-        
-        return view('request.request');
-    }
-
-    public function newRegisterRequest(){
-
-        return view('request.register');
-    }
-
-    public function saveRequest(Request $request){
+class ProjectController extends Controller {
+    
+    public function saveProyects(Request $request){
 
         if($request->isJson()){
             
@@ -35,15 +22,9 @@ class RequestController extends Controller {
                 'unique'    => ':attribute Nro: '.$request->num_cite.' ya se encuentra en uso!',
                 'max' => ':attribute no debe tener más de 100 caracteres.'
             ]);
-            
+        
 
-           $new_request =  Requests::create([
-            'id_user' => auth()->id(),
-            'num_gral' => $request->num_gral,
-            'num_cite' => $request->num_cite,
-            'description' => $request->descripcion,
-            'date_register_request' => $request->fecha,
-           ]);
+           // $cordinates = Project::
 
 
             return response([
@@ -57,6 +38,7 @@ class RequestController extends Controller {
                 'message'=> 'Error 401 (Unauthorized)'
              ],401);
         }
-    }
+        
 
+    }
 }

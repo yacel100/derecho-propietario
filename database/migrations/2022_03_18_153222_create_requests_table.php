@@ -17,8 +17,9 @@ class CreateRequestsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->integer('num_gral');
-            $table->integer('num_cite')->unique();
+            $table->string('num_cite', 100)->unique();
             $table->string('description')->nullable();
+            $table->timestamp('date_register_request');
             $table->timestamp('date_register')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('status')->default(1);
 
