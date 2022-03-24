@@ -301,10 +301,14 @@ function getFeatureInfoUrl(map, latlng) {
                             Swal.fire('Guardado!', '', 'success')  ;
                         },
                         error: function (error) {
-                            Object.keys(error.responseJSON.errors).forEach(function(k){
+                            if(error.status == 422){
+                                Object.keys(error.responseJSON.errors).forEach(function(k){
                                 toastr["error"](error.responseJSON.errors[k]);
                                 //console.log(k + ' - ' + error.responseJSON.errors[k]);
-                            });
+                                });
+                            }else if(error.status == 419){
+                                location.reload();
+                            }
                         }
                     });
 
@@ -336,10 +340,16 @@ function getFeatureInfoUrl(map, latlng) {
                             Swal.fire('Guardado!', '', 'success')  ;
                         },
                         error: function (error) {
-                            Object.keys(error.responseJSON.errors).forEach(function(k){
+                            
+                            if(error.status == 422){
+                                Object.keys(error.responseJSON.errors).forEach(function(k){
                                 toastr["error"](error.responseJSON.errors[k]);
                                 //console.log(k + ' - ' + error.responseJSON.errors[k]);
-                            });
+                                });
+                            }else if(error.status == 419){
+                                location.reload();
+                            }
+
                         }
                     });
         
