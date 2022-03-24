@@ -39,9 +39,9 @@ class RequestController extends Controller {
 
            $new_request =  Requests::create([
             'id_user' => auth()->id(),
-            'num_gral' => $request->num_gral,
-            'num_cite' => $request->num_cite,
-            'description' => $request->descripcion,
+            'num_gral' => trim($request->num_gral),
+            'num_cite' => trim($request->num_cite),
+            'description' => trim($request->descripcion),
             'date_register_request' => $request->fecha,
            ]);
 

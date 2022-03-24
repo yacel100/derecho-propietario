@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Solicitudes')
+@section('title', 'Registro')
 @section('plugins.Datatables', true)
 @section('plugins.leaflet', true)
 @section('plugins.Animation', true)
@@ -98,7 +98,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title" style="text-align: center">REGISTRO NUEVA SOLICITUD</h3>
+            <h3 class="modal-title" style="text-align: center">PROYECTO UBICACIÓN</h3>
             <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" >&times;</span>
             </button>
@@ -106,9 +106,6 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-body">
 
             <div class="card">
-                <div class="card-header" style="text-align: center">
-                  <h4>PROYECTO UBICACIÓN</h4>
-                </div>
                 <div class="card-body">
             
                     <div class="row">
@@ -132,14 +129,14 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="row" >
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Coordenada 1:</label>
-                                <input type="text" class="form-control" id="manzano">
+                                <label>Coordenada X:</label>
+                                <input type="text" class="form-control" id="coor-x">
                             </div> 
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Coordenada 2:</label>
-                                <input type="text" class="form-control" id="manzano">
+                                <label>Coordenada Y:</label>
+                                <input type="text" class="form-control" id="coor-y">
                             </div> 
                         </div>
                     </div>
@@ -174,7 +171,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     </div>
                    
                     <div class="col-sm-12" style="text-align: center">
-                        <button type="button" class="btn btn-success">Registrar Proyecto</button>
+                        <button type="button" id="btn-ubicacion" class="btn btn-success">Registrar Ubicación</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </div> 
             
@@ -234,7 +231,10 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 function getFeatureInfoUrl(map, latlng) {
     //'https://busquedasgamc.cochabamba.bo/web/index.php?r=services/get-feature-info-url',
     var layer = 'https://busquedasgamc.cochabamba.bo/web/index.php?r=services/get-feature-info-url-calles';
-    var params = JSON.parse('{"INFO_FORMAT": "application/json","FEATURE_COUNT": 50 }');
+    var params = {
+        INFO_FORMAT: "application/json",
+        FEATURE_COUNT: 50
+         };
 
     var point = map.latLngToContainerPoint(latlng, map.getZoom()),
         size = map.getSize(),
@@ -260,6 +260,7 @@ function getFeatureInfoUrl(map, latlng) {
     params = L.Util.extend(defaultParams, params || {});
     params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
     params[params.version === '1.3.0' ? 'j' : 'y'] = point.y;
+
     return layer + L.Util.getParamString(params, layer, true);
 }
 
@@ -312,6 +313,42 @@ function getFeatureInfoUrl(map, latlng) {
         });
 
 
+       //save location project
+       $(document).on('click', '#btn-ubicacion', function(){
+        $.ajax({
+                        type: "POST",
+                        headers: {
+                            'Content-Type':'application/json',
+                            'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                        },
+                        url: "{{ route('project.save') }}",
+                        data: JSON.stringify({
+                            nombre_del_proyecto: $('#name-proyect').val(),
+                            codigo_catastral: $('#cod-catastro').val(),
+                            coordenada_x: $('#coor-x').val(),
+                            coordenada_y: $('#coor-y').val(),
+                            distrito: $('#distrito').val(),
+                            sub_distrito: $('#sub-distrito').val(),
+                            zona: $('#zona').val(),
+                            manzano: $('#manzano').val()
+                        }),
+                        success: function(data) {
+                            Swal.fire('Guardado!', '', 'success')  ;
+                        },
+                        error: function (error) {
+                            Object.keys(error.responseJSON.errors).forEach(function(k){
+                                toastr["error"](error.responseJSON.errors[k]);
+                                //console.log(k + ' - ' + error.responseJSON.errors[k]);
+                            });
+                        }
+                    });
+        
+       });
+
+
+
+
+
         // register new proyects
         $(document).on('click', '#save-proyects', function(){
             $('#modal-proyects').modal('show');
@@ -329,7 +366,7 @@ function getFeatureInfoUrl(map, latlng) {
             //"sProcessing": '<img src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif" alt="Funny image">',
             "sLengthMenu": "Mostrar _MENU_ registros",
             "sZeroRecords": "No se encontraron resultados",
-            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sEmptyTable": "Ninguna ubicación registrada aún",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "",
             "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -397,8 +434,6 @@ function getFeatureInfoUrl(map, latlng) {
         }).addTo(mymap);
 
         mymap.setView([-17.39382474713952, -66.15696143763128], 18);
-
-
 
         routingControl = L.Routing.control({
         waypoints: [

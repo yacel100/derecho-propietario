@@ -19,6 +19,8 @@ class Project extends Model{
         'sub_distrito',
         'zona',
         'manzano',
+		'location_utm',
+		'location',
         'create_at',
         'status'
     ];
@@ -31,7 +33,8 @@ class Project extends Model{
     //$this->utm2ll(798223,8071262,19,false)
     
      //fuction convert UTM to Lat and Long
-	public function utm2ll($x,$y,$zone,$aboveEquator){
+	function utm2ll($x,$y,$zone,$aboveEquator){
+		
 		if(!is_numeric($x) or !is_numeric($y) or !is_numeric($zone)){
 			return json_encode(array('success'=>false,'msg'=>"Wrong input parameters"));
 		}
@@ -39,6 +42,7 @@ class Project extends Model{
 		if($aboveEquator!=true){
 			$southhemi = true;
 		}
+
 		$latlon = $this->UTMXYToLatLon ($x, $y, $zone, $southhemi);
 
         return ['lat' => $this->radian2degree($latlon[0]), 'lon' => $this->radian2degree($latlon[1])];
@@ -82,6 +86,7 @@ class Project extends Model{
 		$cmeridian = $this->degree2radian(-183.0 + ($zone * 6.0));
 		return $cmeridian;
 	}
+
 	function LatLonToUTMXY ($lat, $lon, $zone){
 	        $xy = MapLatLonToXY ($lat, $lon, $this->UTMCentralMeridian($zone));
 		/* Adjust easting and northing for UTM system. */
@@ -92,6 +97,7 @@ class Project extends Model{
         	    $xy[1] = $xy[1] + 10000000.0;
 	        return $xy;
 	}
+
 	function UTMXYToLatLon ($x, $y, $zone, $southhemi){
 		$latlon = array();
 		$UTMScaleFactor = 0.9996;
@@ -105,6 +111,7 @@ class Project extends Model{
         	$latlon = $this->MapXYToLatLon ($x, $y, $cmeridian);	
         	return $latlon;
 	}
+
 	function MapXYToLatLon ($x, $y, $lambda0){
 		$philambda = array();
 		$sm_b = 6356752.314;
@@ -173,6 +180,7 @@ class Project extends Model{
 	            + ($epsilon_ * sin (8.0 * $y_));
         	return $result;
 	}
+
 	function MapLatLonToXY ($phi, $lambda, $lambda0){
 		$xy=array();
 		$sm_b = 6356752.314;
@@ -203,6 +211,7 @@ class Project extends Model{
             	+ ($t / 40320.0 * $N * pow (cos ($phi), 8.0) * $l8coef * pow ($l, 8.0));
 		return $xy;
 	}
+
 	function ArcLengthOfMeridian($phi){
 		$sm_b = 6356752.314;
 		$sm_a = 6378137.0;

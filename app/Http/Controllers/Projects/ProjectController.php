@@ -8,28 +8,33 @@ use App\Http\Controllers\Controller;
 
 class ProjectController extends Controller {
     
-    public function saveProyects(Request $request){
+    public function saveProjects(Request $request){
 
         if($request->isJson()){
             
             $this->validate($request, [
-                'num_gral' => 'required',
-                'fecha' => 'required',
-                'num_cite' => 'required|unique:requests|max:100',
-                'descripcion' => 'required'
+                'nombre_del_proyecto' => 'required',
+                'codigo_catastral' => 'required',
+                'coordenada_x' => 'required|numeric|min:6|max:6',
+                'coordenada_y' => 'required|numeric|min:6|max:6',
+                'distrito' => 'required',
+                'sub_distrito' => 'required',
+                'zona' => 'required',
+                'manzano' => 'required'
             ], [
-                'required'  => 'El campo :attribute es obligatorio.',
-                'unique'    => ':attribute Nro: '.$request->num_cite.' ya se encuentra en uso!',
-                'max' => ':attribute no debe tener más de 100 caracteres.'
+                'required'  => 'El campo :attribute es obligatorio!',
+                'numeric' => 'La :attribute debe ser un número!',
+                'min' => 'La :attribute debe ser al menos 6 caracteres númericos!',
+                'max' => 'La :attribute no debe tener más de 6 caracteres númericos!',
             ]);
         
-
-           // $cordinates = Project::
-
+            $project = new Project(); //798223,8071262,19,false
+            $cordinates = $project->utm2ll(trim($request->coordenada_x),trim($request->coordenada_x),19,false);
+            
 
             return response([
                 'status'=> true,
-                'response'=> $new_request
+                'response'=> $cordinates
              ],201);
         }else{
 
