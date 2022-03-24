@@ -18,7 +18,7 @@ class RequestController extends Controller {
 
     public function newRegisterRequest(){
 
-        return view('request.register');
+        return view('request.register', ['today' => date('Y-m-d')]);
     }
 
     public function saveRequest(Request $request){

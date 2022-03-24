@@ -21,19 +21,19 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Nro Gral:</label>
-                    <input type="text" class="form-control" id="gral">
+                    <input type="text" class="form-control" id="gral" autocomplete="off">
                   </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Fecha:</label>
-                    <input type="date" class="form-control" id="date">
+                    <input type="date" value="{{ $today }}" class="form-control" id="date">
                   </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Nro. Cite:</label>
-                    <input type="text" class="form-control" id="cite">
+                    <input type="text" class="form-control" id="cite" autocomplete="off">
                   </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
 
 
 
-  <div id="save-proyect" style="">
+  <div id="save-proyect" style="display: none">
 
     <div class="row">
 <div class="col-sm-6">
@@ -62,6 +62,8 @@
     <button type="button" id="save-proyects" class="btn btn-info col-4"><i class='fas fa-chart-line'></i> Registrar Proyecto</button>
 </div>
     </div>
+
+    <input id="id_request" type="hidden">
    
   <table id="proyects" class="table table-striped table-bordered responsive" style="width:100%">
     <thead>
@@ -112,13 +114,13 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Nombre del Proyecto:</label>
-                                    <input type="text" class="form-control" id="name-proyect">
+                                    <input type="text" class="form-control" id="name-proyect" autocomplete="off">
                                 </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Codigo Catastral:</label>
-                                <input type="text" class="form-control" id="cod-catastro">
+                                <input type="text" class="form-control" id="cod-catastro" autocomplete="off">
                             </div>
                         </div>
                        
@@ -130,13 +132,13 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Coordenada X:</label>
-                                <input type="text" class="form-control" id="coor-x">
+                                <input type="text" class="form-control" id="coor-x" autocomplete="off">
                             </div> 
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Coordenada Y:</label>
-                                <input type="text" class="form-control" id="coor-y">
+                                <input type="text" class="form-control" id="coor-y" autocomplete="off">
                             </div> 
                         </div>
                     </div>
@@ -147,25 +149,25 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Distrito:</label>
-                                <input type="text" class="form-control" id="distrito">
+                                <input type="text" class="form-control" id="distrito" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Sub Distrito:</label>
-                                <input type="text" class="form-control" id="sub-distrito">
+                                <input type="text" class="form-control" id="sub-distrito" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Zona:</label>
-                                <input type="text" class="form-control" id="zona">
+                                <input type="text" class="form-control" id="zona" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Manzano:</label>
-                                <input type="text" class="form-control" id="manzano">
+                                <input type="text" class="form-control" id="manzano" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -194,7 +196,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    
     <style>
         .modal {
         padding: 2% !important;
@@ -297,8 +299,13 @@ function getFeatureInfoUrl(map, latlng) {
                             $('#date').prop( "disabled", true );
                             $('#cite').prop( "disabled", true );
                             $('#descrition').prop( "disabled", true );
+                            $('#id_request').val(data.response.id);
                             $('#save-request').remove();
-                            Swal.fire('Guardado!', '', 'success')  ;
+                            //evento on click en una modal
+                            setTimeout(function() { 
+                                mymap.invalidateSize(); 
+                            }, 1000);
+                            Swal.fire('Guardado!', '', 'success');
                         },
                         error: function (error) {
                             if(error.status == 422){
@@ -316,7 +323,7 @@ function getFeatureInfoUrl(map, latlng) {
                 })
         });
 
-
+        var counter = 0;
        //save location project
        $(document).on('click', '#btn-ubicacion', function(){
         $.ajax({
@@ -327,6 +334,7 @@ function getFeatureInfoUrl(map, latlng) {
                         },
                         url: "{{ route('project.save') }}",
                         data: JSON.stringify({
+                            id_request: $('#id_request').val(),
                             nombre_del_proyecto: $('#name-proyect').val(),
                             codigo_catastral: $('#cod-catastro').val(),
                             coordenada_x: $('#coor-x').val(),
@@ -337,7 +345,15 @@ function getFeatureInfoUrl(map, latlng) {
                             manzano: $('#manzano').val()
                         }),
                         success: function(data) {
-                            Swal.fire('Guardado!', '', 'success')  ;
+                            counter = counter + 1;
+                            Swal.fire('Guardado!', '', 'success');
+                            console.log(data);
+                            datatable.row.add( [
+                                counter.toString(),
+                                data.response.cod_catastro,
+                                data.response.name,
+                                '<button type="button" id="'+data.coordinates.id+'" class="btn btn-danger">Danger</button>'
+                            ] ).draw( false );
                         },
                         error: function (error) {
                             
@@ -366,7 +382,7 @@ function getFeatureInfoUrl(map, latlng) {
 
 
 
-        $('#proyects').DataTable({
+       var datatable = $('#proyects').DataTable({
         "paging": false,
         "searching": false,
         "language": {

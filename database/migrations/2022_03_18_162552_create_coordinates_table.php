@@ -16,8 +16,9 @@ class CreateCoordinatesTable extends Migration
         Schema::create('coordinates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_project');
-            $table->string('coor_x');
-            $table->string('coor_y');
+            $table->string('location_utm', 50);
+            $table->string('location', 50);
+            $table->timestamp('create_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('status')->default(1);
             
             $table->foreign('id_project')->references('id')->on('projects');
