@@ -352,7 +352,6 @@ function getFeatureInfoUrl(map, latlng) {
 
                         }
                     });
-        
        });
 
 
