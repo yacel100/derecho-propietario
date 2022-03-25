@@ -44,4 +44,7 @@ Route::group(['prefix' => 'request', 'middleware' => 'auth'], function () {
 //request from projects
 Route::group(['prefix' => 'project', 'middleware' => 'auth'], function () {
     Route::post('/save-project', 'App\Http\Controllers\Projects\ProjectController@saveProjects')->name('project.save');
+    Route::post('/convert-utm', 'App\Http\Controllers\Projects\ProjectController@convertUtmToLl')->name('convert.utm');
 });
+
+

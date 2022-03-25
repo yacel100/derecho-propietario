@@ -51,8 +51,8 @@
   <hr>
 
 
-
-  <div id="save-proyect" style="display: none">
+{{-- //display: none --}}
+  <div id="save-proyect" style="">
 
     <div class="row">
 <div class="col-sm-6">
@@ -143,10 +143,12 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         </div>
                     </div>
 
-
+                    <div class="col-sm-12" style="text-align: center">
+                            <button type="button" id="search-coordinated" class="btn btn-info col-4"><i class="fab fa-sistrix"></i> Buscar</button>
+                    </div>
 
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-1">
                             <div class="form-group">
                                 <label>Distrito:</label>
                                 <input type="text" class="form-control" id="distrito" autocomplete="off">
@@ -156,6 +158,12 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="form-group">
                                 <label>Sub Distrito:</label>
                                 <input type="text" class="form-control" id="sub-distrito" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Comuna:</label>
+                                <input type="text" style="text-transform:uppercase;" class="form-control" id="comuna" onkeyup="javascript:this.value=this.value.toUpperCase();" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -266,6 +274,37 @@ function getFeatureInfoUrl(map, latlng) {
     return layer + L.Util.getParamString(params, layer, true);
 }
 
+// convert.utm   function all request 
+function senRequestToBackEnd(type, url, data_value){
+
+                 return  $.ajax({
+                        type: type,
+                        headers: {
+                            'Content-Type':'application/json',
+                            'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                        },
+                        url: url,
+                        async: false,
+                        data: JSON.stringify(data_value),
+                        success: function(data_response) {
+                            
+                            
+                        },
+                        error: function (error) {
+                            
+                            if(error.status == 422){
+                                Object.keys(error.responseJSON.errors).forEach(function(k){
+                                toastr["error"](error.responseJSON.errors[k]);
+                                //console.log(k + ' - ' + error.responseJSON.errors[k]);
+                                });
+                            }else if(error.status == 419){
+                                location.reload();
+                            }
+
+                        }
+                    }).responseJSON;
+}
+
 
     $(document).ready(function() {
 
@@ -296,7 +335,7 @@ function getFeatureInfoUrl(map, latlng) {
                         success: function(data) {
                             $('#save-proyect').show(1000);
                             $('#gral').prop( "disabled", true );
-                            $('#date').prop( "disabled", true );
+                            $('#date').prop( "disabled", true );                    
                             $('#cite').prop( "disabled", true );
                             $('#descrition').prop( "disabled", true );
                             $('#id_request').val(data.response.id);
@@ -305,6 +344,7 @@ function getFeatureInfoUrl(map, latlng) {
                             setTimeout(function() { 
                                 mymap.invalidateSize(); 
                             }, 1000);
+
                             Swal.fire('Guardado!', '', 'success');
                         },
                         error: function (error) {
@@ -326,7 +366,7 @@ function getFeatureInfoUrl(map, latlng) {
         var counter = 0;
        //save location project
        $(document).on('click', '#btn-ubicacion', function(){
-        $.ajax({
+                    $.ajax({
                         type: "POST",
                         headers: {
                             'Content-Type':'application/json',
@@ -345,9 +385,10 @@ function getFeatureInfoUrl(map, latlng) {
                             manzano: $('#manzano').val()
                         }),
                         success: function(data) {
-                            counter = counter + 1;
+                            
                             Swal.fire('Guardado!', '', 'success');
-                            console.log(data);
+                            $('#name-proyect').prop('disabled', true);
+                            $('#cod-catastro').prop('disabled', true);
                             datatable.row.add( [
                                 counter.toString(),
                                 data.response.cod_catastro,
@@ -370,8 +411,41 @@ function getFeatureInfoUrl(map, latlng) {
                     });
        });
 
+                        //getting coordinates from catastro with utm cordinates
+                        $('#search-coordinated').on('click', function(){
+                         
+                            if($.trim($('#coor-x').val()) != '' && $.trim($('#coor-y').val()) != ''){
+                               
+                               var value = senRequestToBackEnd('POST', '{{ route("convert.utm") }}', {
+                                   "coordenada_x": $.trim($('#coor-x').val()),
+                                   "coordenada_y": $.trim($('#coor-y').val())
+                               });
 
+                               
+                                mymap.setView([value.response[0], value.response[1]], 18);
+                                marker = new L.Marker([value.response[0], value.response[1]], {
+                                    draggable: true
+                                });
+                    
+                               
+                                $.ajax({
+                                        url: getFeatureInfoUrl(mymap, marker.getLatLng()),
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function(data) {
+                                            $('#distrito').val(data.response.distrito);
+                                            $('#sub-distrito').val(data.response.subdistrito);
+                                            $('#comuna').val(data.response.comuna);
+                                        }
+                                        });
+                            }else{
+                                toastr["error"]('¡Coordenada X o Coordenada Y se encuentran vacias!');
+                            }
 
+                            });
+               
+             
 
 
         // register new proyects
@@ -497,6 +571,7 @@ function getFeatureInfoUrl(map, latlng) {
                 });
 
                 marker.on('dragend', function (getValue) {
+                    console.log(marker.getLatLng());
                         $.ajax({
                         url: getFeatureInfoUrl(mymap, marker.getLatLng()),
                         type: 'GET',
@@ -506,7 +581,9 @@ function getFeatureInfoUrl(map, latlng) {
                         console.log(data);
                         }
                         });
+                        
                 }); 
+        
 
 });
 

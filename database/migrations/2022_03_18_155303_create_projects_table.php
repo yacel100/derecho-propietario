@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->string('distrito', 100);
             $table->string('sub_distrito', 100);
             $table->string('zona', 100);
+            $table->string('comuna', 100)->nullable();
             $table->string('manzano')->nullable();
             $table->timestamp('create_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('status')->default(1);

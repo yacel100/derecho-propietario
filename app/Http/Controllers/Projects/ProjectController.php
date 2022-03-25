@@ -122,4 +122,45 @@ class ProjectController extends Controller {
         
 
     }
+
+
+    public function convertUtmToLl(Request $request){
+
+        if($request->isJson()){
+
+            $this->validate($request, [
+                'coordenada_x' => 'required|min:5|max:10',
+                'coordenada_y' => 'required|min:5|max:10',
+            ], [
+                'required'  => 'El campo :attribute es obligatorio!',
+                'min' => 'La :attribute debe ser al menos 5 caracteres númericos!',
+                'max' => 'La :attribute no debe tener más de 10 caracteres númericos!',
+            ]);
+
+            $coordenada_x = trim(str_replace(',', '.', $request->coordenada_x));
+            $coordenada_y = trim(str_replace(',', '.', $request->coordenada_y));
+
+            $project = new Project();
+            $cordinates = $project->utm2ll($coordenada_x,$coordenada_y, 19, false);
+
+            if($cordinates['success'] == true){
+
+                return response([
+                    'status'=> true,
+                    'response'=> [$cordinates['lat'], $cordinates['lon']]
+                 ],202);
+            }else{
+                return response([
+                    'errors' => ['message' => $cordinates['msg']]
+                 ],422);
+            }
+
+        }else{
+            return response([
+                'status'=> false,
+                'message'=> 'Error 401 (Unauthorized)'
+             ],401);
+        }
+
+    }
 }
