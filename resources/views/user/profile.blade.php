@@ -33,7 +33,8 @@
                             @endif
                             
                             @endforeach
-                      </select></div>
+                      </select>
+                    </div>
                     <div class="col-md-12"><label class="labels">Unida</label><input type="text" class="form-control" placeholder="Su unida" value="{{ mb_strtoupper($user_data->ofice) }}"></div>
                 </div>
                

@@ -21,7 +21,6 @@ Route::get('/', function () {
         return redirect('login');
     }
     
-    
 });
 
 
