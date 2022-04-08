@@ -1,0 +1,19 @@
+Cargando los datos de la aplicacion php
+// Ingresando al modo terminal del contenedor
+# docker-compose exec php-apache /bin/bash
+// creando proyecto laravel 9, descarga la ultima version
+# composer create-project laravel/laravel src --prefer-dist
+// Para usar una version laravel 8.X
+#  composer create-project  --prefer-dist  laravel/laravel src 8.*
+// Para usar una version laravel 7.X
+#  composer create-project  --prefer-dist  laravel/laravel src 7.*
+//cargando los datos de un migrate
+# php artisan migrate:fresh --seed
+
+Revisando la base de datos
+// Cargando backup de la base de datos por terminal
+#  docker-compose run --rm database pg_restore -h database -U postgres -d laravel_docker /tmp/bk_portal_web_gamc-2022-03-05_070951.dump --no-owner
+//Ingresando como modo temrinal a la base de datos
+# docker-compose exec database /bin/bash
+// Ingresando a nuestra base de datos
+# psql -U postgres laravel_docker
