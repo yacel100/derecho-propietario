@@ -4,3 +4,5 @@
 * create database
 * php artisan migrate:fresh --seed
 * php artisan serve --port 8000 --host {ip}
+
+***prueba001***
